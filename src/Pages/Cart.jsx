@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+﻿import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CSS/Cart.css';
 import { ShopContext } from '../Context/ShopContext';
@@ -128,7 +128,7 @@ const Cart = () => {
               <div className="cart-format">
                 <img src={product.image} alt={product.name} className='cart-icon-product-icon' />
                 <p className="cart-product-title">{product.name}</p>
-                <p className="cart-product-price">${product.new_price}</p>
+                <p className="cart-product-price">ETB {product.new_price}</p>
 
                 <div className="cart-quantity-controls">
                   <button
@@ -148,7 +148,7 @@ const Cart = () => {
                   </button>
                 </div>
 
-                <p className="cart-item-total">${(product.new_price * cartItems[product.id]).toFixed(2)}</p>
+                <p className="cart-item-total">ETB {(product.new_price * cartItems[product.id]).toFixed(2)}</p>
 
                 <img
                   className='cart-remove-icon'
@@ -169,26 +169,26 @@ const Cart = () => {
           <div>
             <div className="cart-total-item">
               <p>Subtotal</p>
-              <p>${getSubtotal().toFixed(2)}</p>
+              <p>ETB {getSubtotal().toFixed(2)}</p>
             </div>
             <hr />
             <div className="cart-total-item">
               <p>Shipping Fee</p>
-              <p>{getShippingFee() === 0 ? 'Free' : `$${getShippingFee().toFixed(2)}`}</p>
+              <p>{getShippingFee() === 0 ? 'Free' : `ETB ${getShippingFee().toFixed(2)}`}</p>
             </div>
             <hr />
             {appliedCoupon && (
               <>
                 <div className="cart-total-item cart-discount">
                   <p>Discount ({appliedCoupon.code})</p>
-                  <p className="discount-amount">-${getDiscount().toFixed(2)}</p>
+                  <p className="discount-amount">-ETB {getDiscount().toFixed(2)}</p>
                 </div>
                 <hr />
               </>
             )}
             <div className="cart-total-item">
               <h3>Total</h3>
-              <h3>${getFinalTotal().toFixed(2)}</h3>
+              <h3>ETB {getFinalTotal().toFixed(2)}</h3>
             </div>
           </div>
           <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>

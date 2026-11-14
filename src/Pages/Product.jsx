@@ -17,8 +17,8 @@ const Product = () => {
   const { productId } = useParams();
   const [reviewRefresh, setReviewRefresh] = useState(0);
 
-  // Fetch product from backend and track view
-  const { product, loading, error } = useProduct(Number(productId), userId);
+  // Fetch product from backend and track view — id is a UUID string
+  const { product, loading, error } = useProduct(productId, userId);
 
   // Track view interaction when product loads
   useEffect(() => {

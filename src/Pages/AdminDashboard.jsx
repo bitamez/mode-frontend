@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './CSS/AdminDashboard.css';
 import AdminAnalytics from '../Components/AdminAnalytics/AdminAnalytics';
 
@@ -554,7 +554,7 @@ const AdminDashboard = () => {
                                     <div className="stat-card highlight">
                                         <div className="stat-icon">💰</div>
                                         <div className="stat-info">
-                                            <h3>${stats.revenue}</h3>
+                                            <h3>ETB {stats.revenue}</h3>
                                             <p>Total Revenue</p>
                                         </div>
                                     </div>
@@ -632,7 +632,7 @@ const AdminDashboard = () => {
                                                 <div className="product-info">
                                                     <h3>{product.name}</h3>
                                                     <p className="product-category">{product.category}</p>
-                                                    <p className="product-price">${product.new_price}</p>
+                                                    <p className="product-price">ETB {product.new_price}</p>
                                                     {product.sellerId && (
                                                         <p className="product-seller">
                                                             Seller: {product.sellerId.businessName || 'Unknown'}
@@ -672,7 +672,7 @@ const AdminDashboard = () => {
                                                 <tr key={order._id}>
                                                     <td>{order.orderNumber}</td>
                                                     <td>{order.userId?.username || 'N/A'}</td>
-                                                    <td>${order.total.toFixed(2)}</td>
+                                                    <td>ETB {order.total.toFixed(2)}</td>
                                                     <td>
                                                         <span className={`status-badge ${order.orderStatus}`}>
                                                             {order.orderStatus}
@@ -777,7 +777,7 @@ const AdminDashboard = () => {
                                                     <td>{product.id}</td>
                                                     <td>{product.name}</td>
                                                     <td>{product.category}</td>
-                                                    <td>${product.new_price}</td>
+                                                    <td>ETB {product.new_price}</td>
                                                     <td>{product.stock || 'N/A'}</td>
                                                     <td>
                                                         <span className={product.isApproved ? 'status-active' : 'status-inactive'}>
@@ -914,8 +914,8 @@ const AdminDashboard = () => {
                                                     <tr key={coupon._id}>
                                                         <td><strong>{coupon.code}</strong></td>
                                                         <td>{coupon.discountType}</td>
-                                                        <td>{coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : `$${coupon.discountValue}`}</td>
-                                                        <td>${coupon.minPurchase || 0}</td>
+                                                        <td>{coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : `ETB ${coupon.discountValue}`}</td>
+                                                        <td>ETB {coupon.minPurchase || 0}</td>
                                                         <td>{new Date(coupon.expiresAt).toLocaleDateString()}</td>
                                                         <td>
                                                             <span className={coupon.isActive ? 'status-active' : 'status-inactive'}>
@@ -967,7 +967,7 @@ const AdminDashboard = () => {
                                                     <tr key={order._id}>
                                                         <td>{order.orderNumber}</td>
                                                         <td>{order.userId?.username || 'N/A'}</td>
-                                                        <td>${order.total.toFixed(2)}</td>
+                                                        <td>ETB {order.total.toFixed(2)}</td>
                                                         <td>
                                                             <strong>{order.paymentDetails?.referenceCode || 'N/A'}</strong>
                                                         </td>

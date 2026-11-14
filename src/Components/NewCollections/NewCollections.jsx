@@ -6,8 +6,9 @@ import { ShopContext } from '../../Context/ShopContext';
 const NewCollections = () => {
   const { all_product } = useContext(ShopContext);
 
-  // Get the latest 8 products (or first 8 if no date sorting)
-  const newCollections = all_product.slice(0, 8);
+  // Pick ~3 from each category so all 3 categories show on home page
+  const pick = (cat, n) => all_product.filter(p => p.category === cat).slice(0, n);
+  const newCollections = [...pick('women', 3), ...pick('men', 3), ...pick('kid', 2)];
 
   return (
     <div className='new-collections'>

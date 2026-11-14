@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './CSS/ComprehensiveAdminDashboard.css';
 import AdminAnalytics from '../Components/AdminAnalytics/AdminAnalytics';
 
@@ -367,7 +367,7 @@ const ComprehensiveAdminDashboard = () => {
                                             </span>
                                         </td>
                                         <td>{seller.commission}%</td>
-                                        <td>${seller.totalSales?.toFixed(2) || '0.00'}</td>
+                                        <td>ETB {seller.totalSales?.toFixed(2) || '0.00'}</td>
                                         <td>
                                             {!seller.isApproved && (
                                                 <button
@@ -489,7 +489,7 @@ const ComprehensiveAdminDashboard = () => {
                             <div className="product-info">
                                 <h4>{product.name}</h4>
                                 <p className="product-category">{product.category}</p>
-                                <p className="product-price">${product.new_price}</p>
+                                <p className="product-price">ETB {product.new_price}</p>
                                 <span className={`status-badge ${product.isApproved ? 'approved' : 'pending'}`}>
                                     {product.isApproved ? 'Approved' : 'Pending'}
                                 </span>
@@ -546,7 +546,7 @@ const ComprehensiveAdminDashboard = () => {
                                 <tr key={order._id}>
                                     <td>{order.orderNumber}</td>
                                     <td>{order.userId?.username || 'N/A'}</td>
-                                    <td>${order.total.toFixed(2)}</td>
+                                    <td>ETB {order.total.toFixed(2)}</td>
                                     <td>
                                         <select
                                             value={order.orderStatus}
@@ -646,7 +646,7 @@ const ComprehensiveAdminDashboard = () => {
                             {data.payments.map((payment) => (
                                 <tr key={payment._id}>
                                     <td>{payment.orderNumber}</td>
-                                    <td>${payment.total.toFixed(2)}</td>
+                                    <td>ETB {payment.total.toFixed(2)}</td>
                                     <td>{payment.paymentMethod}</td>
                                     <td>
                                         <span className={`payment-badge ${payment.paymentStatus}`}>
@@ -748,7 +748,7 @@ const ComprehensiveAdminDashboard = () => {
                 <div className="reports-grid">
                     <div className="report-card">
                         <h3>Sales Report</h3>
-                        <p>Total Revenue: ${data.reports.orderStats?.totalRevenue?.toFixed(2) || '0.00'}</p>
+                        <p>Total Revenue: ETB {data.reports.orderStats?.totalRevenue?.toFixed(2) || '0.00'}</p>
                         <button className="btn-action">Download</button>
                     </div>
                     <div className="report-card">

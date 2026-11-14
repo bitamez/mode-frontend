@@ -6,6 +6,7 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import ToastContainer from './Components/Toast/ToastContainer';
 import Navbar from './Components/Navbar/Navbar';
+import PaymentSuccess from './Pages/PaymentSuccess';
 import Shop from './Pages/Shop';
 import ShopCategory from './Pages/ShopCategory';
 import Product from './Pages/Product';
@@ -62,6 +63,7 @@ function App() {
                 <Route path='/wishlist' element={<Wishlist />} />
                 <Route path='/orders' element={<Orders />} />
                 <Route path='/profile' element={<Profile />} />
+                <Route path="/payment/success" element={<PaymentSuccess />} />
 
                 {/* Protected Admin Routes */}
                 <Route path='/admin' element={

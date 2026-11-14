@@ -1,4 +1,12 @@
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect,
+    useCallback
+} from 'react';
+
 import authAPI from '../api/authAPI';
 import { jwtDecode } from 'jwt-decode';
 
@@ -6,20 +14,25 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState('guest');
     const [permissions, setPermissions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Decode JWT and extract user info
     const decodeToken = useCallback((token) => {
         try {
             const decoded = jwtDecode(token);
+
+            if (!decoded.userId) {
+                console.error('JWT does not contain userId:', decoded);
+                return null;
+            }
+
             return {
                 userId: decoded.userId,
-                email: decoded.email,
-                username: decoded.username,
-                role: decoded.role || 'guest',
+                email: decoded.email || '',
+                username: decoded.username || '',
+                role: decoded.role || 'customer',
                 permissions: decoded.permissions || [],
                 exp: decoded.exp
             };
@@ -29,31 +42,32 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // Check if token is expired
     const isTokenExpired = useCallback((token) => {
         try {
             const decoded = jwtDecode(token);
-            return decoded.exp * 1000 < Date.now();
+
+            return !decoded.exp || decoded.exp * 1000 <= Date.now();
         } catch (error) {
             return true;
         }
     }, []);
 
-    // Load user from localStorage on mount
     useEffect(() => {
         const initAuth = () => {
             const token = localStorage.getItem('auth-token');
 
             if (token && !isTokenExpired(token)) {
                 const userData = decodeToken(token);
+
                 if (userData) {
                     setUser(userData);
                     setRole(userData.role);
                     setPermissions(userData.permissions);
                     setIsAuthenticated(true);
+                } else {
+                    localStorage.removeItem('auth-token');
                 }
             } else {
-                // Clear expired token
                 localStorage.removeItem('auth-token');
                 setRole('guest');
             }
@@ -64,99 +78,131 @@ export const AuthProvider = ({ children }) => {
         initAuth();
     }, [decodeToken, isTokenExpired]);
 
-    // Login function
     const login = async (credentials) => {
         try {
             const response = await authAPI.login(credentials);
 
             if (response.data.success && response.data.token) {
                 const token = response.data.token;
-                localStorage.setItem('auth-token', token);
 
                 const userData = decodeToken(token);
-                if (userData) {
-                    setUser(userData);
-                    setRole(userData.role);
-                    setPermissions(userData.permissions);
-                    setIsAuthenticated(true);
+
+                if (!userData || isTokenExpired(token)) {
+                    return {
+                        success: false,
+                        error: 'Login returned an invalid or expired token.'
+                    };
                 }
 
-                return { success: true, user: userData };
+                localStorage.setItem('auth-token', token);
+
+                setUser(userData);
+                setRole(userData.role);
+                setPermissions(userData.permissions);
+                setIsAuthenticated(true);
+
+                return {
+                    success: true,
+                    user: userData
+                };
             }
 
-            return { success: false, error: response.data.error || 'Login failed' };
-        } catch (error) {
-            console.error('Login error:', error);
             return {
                 success: false,
-                error: error.response?.data?.error || 'Login failed'
+                error: response.data.error || 'Login failed'
+            };
+        } catch (error) {
+            console.error('Login error:', error);
+
+            return {
+                success: false,
+                error: error.response?.data?.error ||
+                    error.response?.data?.message ||
+                    'Login failed'
             };
         }
     };
 
-    // Signup function
     const signup = async (userData) => {
         try {
             const response = await authAPI.signup(userData);
 
             if (response.data.success && response.data.token) {
                 const token = response.data.token;
-                localStorage.setItem('auth-token', token);
 
                 const decodedUser = decodeToken(token);
-                if (decodedUser) {
-                    setUser(decodedUser);
-                    setRole(decodedUser.role);
-                    setPermissions(decodedUser.permissions);
-                    setIsAuthenticated(true);
+
+                if (!decodedUser || isTokenExpired(token)) {
+                    return {
+                        success: false,
+                        error: 'Signup returned an invalid or expired token.'
+                    };
                 }
 
-                return { success: true, user: decodedUser };
+                localStorage.setItem('auth-token', token);
+
+                setUser(decodedUser);
+                setRole(decodedUser.role);
+                setPermissions(decodedUser.permissions);
+                setIsAuthenticated(true);
+
+                return {
+                    success: true,
+                    user: decodedUser
+                };
             }
 
-            return { success: false, error: response.data.error || 'Signup failed' };
-        } catch (error) {
-            console.error('Signup error:', error);
             return {
                 success: false,
-                error: error.response?.data?.error || 'Signup failed'
+                error: response.data.error || 'Signup failed'
+            };
+        } catch (error) {
+            console.error('Signup error:', error);
+
+            return {
+                success: false,
+                error: error.response?.data?.error ||
+                    error.response?.data?.message ||
+                    'Signup failed'
             };
         }
     };
 
-    // Logout function
     const logout = useCallback(() => {
         localStorage.removeItem('auth-token');
+
         setUser(null);
         setRole('guest');
         setPermissions([]);
         setIsAuthenticated(false);
     }, []);
 
-    // Check if user has specific role
     const hasRole = useCallback((requiredRole) => {
         if (!role) return false;
+
         if (Array.isArray(requiredRole)) {
             return requiredRole.includes(role);
         }
+
         return role === requiredRole;
     }, [role]);
 
-    // Check if user has specific permission
     const hasPermission = useCallback((requiredPermission) => {
-        if (!permissions || permissions.length === 0) return false;
-
-        // Admin has all permissions
         if (role === 'admin') return true;
 
+        if (!permissions || permissions.length === 0) {
+            return false;
+        }
+
         if (Array.isArray(requiredPermission)) {
-            return requiredPermission.some(perm => permissions.includes(perm));
+            return requiredPermission.some(
+                permission => permissions.includes(permission)
+            );
         }
 
         return permissions.includes(requiredPermission);
     }, [permissions, role]);
 
-    // Check if user can perform action on resource
     const canAccess = useCallback((resource, action, scope = 'own') => {
         if (role === 'admin') return true;
 
@@ -164,16 +210,18 @@ export const AuthProvider = ({ children }) => {
             ? `${resource}.${action}.all`
             : `${resource}.${action}.own`;
 
-        return hasPermission(permission) || hasPermission(`${resource}.${action}`);
+        return (
+            hasPermission(permission) ||
+            hasPermission(`${resource}.${action}`)
+        );
     }, [role, hasPermission]);
 
-    // Get user display name
     const getDisplayName = useCallback(() => {
         if (!user) return 'Guest';
+
         return user.username || user.email || 'User';
     }, [user]);
 
-    // Get role display name
     const getRoleDisplayName = useCallback(() => {
         const roleNames = {
             admin: 'Administrator',
@@ -184,53 +232,40 @@ export const AuthProvider = ({ children }) => {
             finance: 'Finance Staff',
             guest: 'Guest'
         };
+
         return roleNames[role] || 'User';
     }, [role]);
 
-    // Check if user is admin
     const isAdmin = useCallback(() => role === 'admin', [role]);
-
-    // Check if user is seller
     const isSeller = useCallback(() => role === 'seller', [role]);
-
-    // Check if user is customer
     const isCustomer = useCallback(() => role === 'customer', [role]);
-
-    // Check if user is delivery staff
     const isDelivery = useCallback(() => role === 'delivery', [role]);
-
-    // Check if user is support staff
     const isSupport = useCallback(() => role === 'support', [role]);
-
-    // Check if user is finance staff
     const isFinance = useCallback(() => role === 'finance', [role]);
 
-    // Check if user is guest
-    const isGuest = useCallback(() => !isAuthenticated || role === 'guest', [isAuthenticated, role]);
+    const isGuest = useCallback(
+        () => !isAuthenticated || role === 'guest',
+        [isAuthenticated, role]
+    );
 
     const value = {
-        // State
         user,
         role,
         permissions,
         loading,
         isAuthenticated,
 
-        // Actions
         login,
         signup,
         logout,
 
-        // Permission checks
         hasRole,
         hasPermission,
         canAccess,
 
-        // Utility functions
         getDisplayName,
         getRoleDisplayName,
 
-        // Role checks
         isAdmin,
         isSeller,
         isCustomer,
@@ -247,22 +282,21 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => {
     const context = useContext(AuthContext);
+
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
+
     return context;
 };
 
-// Custom hook to check permission
 export const usePermission = (permission) => {
     const { hasPermission } = useAuth();
     return hasPermission(permission);
 };
 
-// Custom hook to check role
 export const useRole = (role) => {
     const { hasRole } = useAuth();
     return hasRole(role);

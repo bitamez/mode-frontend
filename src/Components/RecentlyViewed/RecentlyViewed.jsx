@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RecentlyViewed.css';
 
@@ -86,11 +86,11 @@ const RecentlyViewed = ({ currentProductId, maxItems = 10 }) => {
                                 <h3 className="recently-viewed-name">{product.name}</h3>
                                 <div className="recently-viewed-price">
                                     <span className="recently-viewed-new-price">
-                                        ${product.new_price}
+                                        ETB {product.new_price}
                                     </span>
                                     {product.old_price && (
                                         <span className="recently-viewed-old-price">
-                                            ${product.old_price}
+                                            ETB {product.old_price}
                                         </span>
                                     )}
                                 </div>

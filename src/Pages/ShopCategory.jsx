@@ -5,6 +5,7 @@ import SearchBar from '../Components/SearchBar/SearchBar';
 import FilterSidebar from '../Components/FilterSidebar/FilterSidebar';
 import SortDropdown from '../Components/SortDropdown/SortDropdown';
 import productAPI from '../api/productAPI';
+import resolveImage from '../utils/resolveImage';
 
 const ShopCategory = (props) => {
   const [products, setProducts] = useState([]);
@@ -55,8 +56,11 @@ const ShopCategory = (props) => {
       console.log('ShopCategory - API Response:', response.data);
       console.log('ShopCategory - Products count:', response.data.data?.length || 0);
 
-      // Use products directly - external URLs work as-is
-      const productsFromAPI = response.data.data || [];
+      // Resolve image filenames to bundled local assets
+      const productsFromAPI = (response.data.data || []).map(p => ({
+        ...p,
+        image: resolveImage(p.image)
+      }));
       setProducts(productsFromAPI);
     } catch (err) {
       console.error('Error fetching products:', err);

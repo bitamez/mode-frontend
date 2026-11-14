@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './AdminAnalytics.css';
 
 const AdminAnalytics = () => {
@@ -54,7 +54,7 @@ const AdminAnalytics = () => {
             <div className="metrics-grid">
                 <div className="metric-card">
                     <h3>Total Revenue</h3>
-                    <p className="metric-value">${analytics.orderStats?.totalRevenue?.toFixed(2) || '0.00'}</p>
+                    <p className="metric-value">ETB {analytics.orderStats?.totalRevenue?.toFixed(2) || '0.00'}</p>
                     <span className="metric-change positive">+12.5%</span>
                 </div>
                 <div className="metric-card">
@@ -64,7 +64,7 @@ const AdminAnalytics = () => {
                 </div>
                 <div className="metric-card">
                     <h3>Average Order Value</h3>
-                    <p className="metric-value">${analytics.orderStats?.averageOrderValue?.toFixed(2) || '0.00'}</p>
+                    <p className="metric-value">ETB {analytics.orderStats?.averageOrderValue?.toFixed(2) || '0.00'}</p>
                     <span className="metric-change negative">-2.1%</span>
                 </div>
                 <div className="metric-card">
@@ -120,7 +120,7 @@ const AdminAnalytics = () => {
                                     style={{ width: `${(cat.revenue / Math.max(...analytics.revenueByCategory.map(c => c.revenue))) * 100}%` }}
                                 ></div>
                             </div>
-                            <span className="category-value">${cat.revenue.toFixed(2)}</span>
+                            <span className="category-value">ETB {cat.revenue.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>

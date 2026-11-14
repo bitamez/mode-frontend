@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './CSS/Profile.css';
 
 const Profile = () => {
@@ -302,14 +302,14 @@ const Profile = () => {
                                                         <p className="item-name">{item.name}</p>
                                                         <p className="item-quantity">Qty: {item.quantity}</p>
                                                     </div>
-                                                    <p className="item-price">${item.price}</p>
+                                                    <p className="item-price">ETB {item.price}</p>
                                                 </div>
                                             ))}
                                         </div>
                                         <div className="order-footer">
                                             <div className="order-total">
                                                 <span>Total:</span>
-                                                <strong>${order.total.toFixed(2)}</strong>
+                                                <strong>ETB {order.total.toFixed(2)}</strong>
                                             </div>
                                             {order.orderStatus === 'pending' && (
                                                 <button

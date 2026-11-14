@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './CSS/SellerDashboard.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || '${API_BASE_URL}';
@@ -256,7 +256,7 @@ const SellerDashboard = () => {
                 <div className="stat-card highlight">
                     <div className="stat-icon">💰</div>
                     <div className="stat-info">
-                        <h3>${sellerProfile?.totalSales?.toFixed(2) || '0.00'}</h3>
+                        <h3>ETB {sellerProfile?.totalSales?.toFixed(2) || '0.00'}</h3>
                         <p>Total Sales</p>
                     </div>
                 </div>
@@ -374,7 +374,7 @@ const SellerDashboard = () => {
                             <div className="product-info">
                                 <h4>{product.name}</h4>
                                 <p className="product-category">{product.category}</p>
-                                <p className="product-price">${product.new_price}</p>
+                                <p className="product-price">ETB {product.new_price}</p>
                                 <p className="product-stock">Stock: {product.stock || 'N/A'}</p>
                                 <span className={`status-badge ${product.isApproved ? 'approved' : 'pending'}`}>
                                     {product.isApproved ? 'Active' : 'Pending Approval'}
@@ -429,7 +429,7 @@ const SellerDashboard = () => {
                                 <td>{order.orderNumber}</td>
                                 <td>{order.userId?.username || 'N/A'}</td>
                                 <td>{order.items?.length || 0} items</td>
-                                <td>${order.total.toFixed(2)}</td>
+                                <td>ETB {order.total.toFixed(2)}</td>
                                 <td>
                                     <span className={`status-badge ${order.orderStatus}`}>
                                         {order.orderStatus}
@@ -450,16 +450,16 @@ const SellerDashboard = () => {
             <div className="earnings-grid">
                 <div className="earning-card">
                     <h3>Total Sales</h3>
-                    <p className="amount">${earnings.totalSales?.toFixed(2) || '0.00'}</p>
+                    <p className="amount">ETB {earnings.totalSales?.toFixed(2) || '0.00'}</p>
                 </div>
                 <div className="earning-card">
                     <h3>Your Earnings</h3>
-                    <p className="amount">${earnings.totalEarnings?.toFixed(2) || '0.00'}</p>
+                    <p className="amount">ETB {earnings.totalEarnings?.toFixed(2) || '0.00'}</p>
                     <span className="note">After {earnings.commission}% commission</span>
                 </div>
                 <div className="earning-card">
                     <h3>Pending Payouts</h3>
-                    <p className="amount">${earnings.pendingPayouts?.toFixed(2) || '0.00'}</p>
+                    <p className="amount">ETB {earnings.pendingPayouts?.toFixed(2) || '0.00'}</p>
                 </div>
             </div>
             <div className="payout-info">

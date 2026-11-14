@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+﻿import React, { useState, useEffect, useContext } from 'react';
 import './CSS/Wishlist.css';
 import wishlistAPI from '../api/wishlistAPI';
 import { useToast } from '../hooks/useToast';
@@ -144,9 +144,9 @@ const Wishlist = () => {
                             </Link>
 
                             <div className="item-price">
-                                <span className="new-price">${item.product.new_price}</span>
+                                <span className="new-price">ETB {item.product.new_price}</span>
                                 {item.product.old_price > item.product.new_price && (
-                                    <span className="old-price">${item.product.old_price}</span>
+                                    <span className="old-price">ETB {item.product.old_price}</span>
                                 )}
                             </div>
 

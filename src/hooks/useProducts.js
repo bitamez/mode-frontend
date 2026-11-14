@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import productAPI from '../api/productAPI';
+import resolveImage from '../utils/resolveImage';
 
-/**
- * Hook for fetching products with filters
- * Algorithms: #1 (Catalog), #3 (Filtering), #4 (Sorting)
- */
 export const useProducts = (filters = {}) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,9 +17,9 @@ export const useProducts = (filters = {}) => {
             setLoading(true);
             setError(null);
             const response = await productAPI.getAll(filters);
-            const productsData = response.data.data || [];
-
-            // Use products directly - external URLs work as-is
+            const productsData = (response.data.data || []).map(p => ({
+                ...p, image: resolveImage(p.image)
+            }));
             setProducts(productsData);
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to fetch products');
@@ -32,26 +29,16 @@ export const useProducts = (filters = {}) => {
         }
     };
 
-    return {
-        products,
-        loading,
-        error,
-        refetch: fetchProducts
-    };
+    return { products, loading, error, refetch: fetchProducts };
 };
 
-/**
- * Hook for fetching single product
- */
 export const useProduct = (productId, userId = null) => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (productId) {
-            fetchProduct();
-        }
+        if (productId) fetchProduct();
         // eslint-disable-next-line
     }, [productId, userId]);
 
@@ -60,10 +47,8 @@ export const useProduct = (productId, userId = null) => {
             setLoading(true);
             setError(null);
             const response = await productAPI.getById(productId, userId);
-            const productData = response.data.data;
-
-            // Use product directly - external URLs work as-is
-            setProduct(productData);
+            const p = response.data.data;
+            setProduct(p ? { ...p, image: resolveImage(p.image) } : null);
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to fetch product');
             console.error('Error fetching product:', err);
@@ -72,12 +57,7 @@ export const useProduct = (productId, userId = null) => {
         }
     };
 
-    return {
-        product,
-        loading,
-        error,
-        refetch: fetchProduct
-    };
+    return { product, loading, error, refetch: fetchProduct };
 };
 
 export default useProducts;

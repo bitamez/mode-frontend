@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CSS/FinanceDashboard.css';
 import { useAuth } from '../contexts/AuthContext';
@@ -139,7 +139,7 @@ const FinanceDashboard = () => {
     };
 
     const formatCurrency = (amount) => {
-        return `$${amount?.toFixed(2) || '0.00'}`;
+        return `ETB $amount?.toFixed(2) || '0.00'`;
     };
 
     if (loading) {

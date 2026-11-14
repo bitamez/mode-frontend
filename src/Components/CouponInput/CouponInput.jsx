@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import './CouponInput.css';
 import couponAPI from '../../api/couponAPI';
 import { useToast } from '../../hooks/useToast';
@@ -30,7 +30,7 @@ const CouponInput = ({ userId, subtotal, shippingFee, onCouponApplied, onCouponR
             );
 
             const couponData = response.data.data;
-            toast.success(`Coupon applied! You saved $${couponData.discount.toFixed(2)}`);
+            toast.success(`Coupon applied! You saved $ETB {couponData.discount.toFixed(2)}`);
 
             if (onCouponApplied) {
                 onCouponApplied(couponData);
@@ -71,7 +71,7 @@ const CouponInput = ({ userId, subtotal, shippingFee, onCouponApplied, onCouponR
                                 {appliedCoupon.description}
                             </div>
                             <div className="coupon-applied-discount">
-                                Discount: -${appliedCoupon.discount.toFixed(2)}
+                                Discount: -ETB {appliedCoupon.discount.toFixed(2)}
                             </div>
                         </div>
                     </div>

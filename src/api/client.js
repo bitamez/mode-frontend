@@ -1,51 +1,52 @@
+
 import axios from 'axios';
 
-// API Base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+    process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-// Create axios instance
-export const api = axios.create({
+console.log('API URL:', API_BASE_URL);
+
+const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json'
     },
-    timeout: 10000 // 10 seconds
+    timeout: 30000
 });
 
-// Request interceptor
+// Attach saved login token to every API request
 api.interceptors.request.use(
     (config) => {
-        // Add auth token if available
         const token = localStorage.getItem('auth-token');
+
         if (token) {
+            config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${token}`;
         }
+
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
-// Response interceptor
+// Handle API errors
 api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
+    (response) => response,
     (error) => {
-        // Handle errors globally
         if (error.response) {
-            // Server responded with error
             console.error('API Error:', error.response.data);
+
+            // Do not automatically delete the login token here.
+            // Authentication should be checked by the backend.
         } else if (error.request) {
-            // Request made but no response
             console.error('Network Error:', error.message);
         } else {
-            // Something else happened
-            console.error('Error:', error.message);
+            console.error('Request Error:', error.message);
         }
+
         return Promise.reject(error);
     }
 );
 
 export default api;
+export { api };

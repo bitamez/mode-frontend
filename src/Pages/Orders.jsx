@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './CSS/Orders.css';
 import orderAPI from '../api/orderAPI';
 import OrderTracking from '../Components/OrderTracking/OrderTracking';
@@ -68,7 +68,7 @@ const Orders = () => {
     };
 
     const formatPrice = (price) => {
-        return `$${price.toFixed(2)}`;
+        return `ETB ${price.toFixed(2)}`;
     };
 
     const canCancelOrder = (order) => {

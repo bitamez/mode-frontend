@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import productAPI from '../api/productAPI';
+import resolveImage from '../utils/resolveImage';
 
-/**
- * Hook for product search
- * Algorithms: #2 (Search), #7 (Ranking), #14 (Search Optimization)
- */
 export const useSearch = () => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -18,12 +15,11 @@ export const useSearch = () => {
             setSuggestions(null);
 
             const response = await productAPI.search(query, filters);
-            const productsData = response.data.data || [];
-
-            // Use products directly - external URLs work as-is
+            const productsData = (response.data.data || []).map(p => ({
+                ...p, image: resolveImage(p.image)
+            }));
             setResults(productsData);
 
-            // Handle suggestions for zero results
             if (response.data.suggestions) {
                 setSuggestions(response.data.suggestions);
             }
@@ -41,14 +37,7 @@ export const useSearch = () => {
         setError(null);
     };
 
-    return {
-        results,
-        loading,
-        error,
-        suggestions,
-        search,
-        clearResults
-    };
+    return { results, loading, error, suggestions, search, clearResults };
 };
 
 export default useSearch;

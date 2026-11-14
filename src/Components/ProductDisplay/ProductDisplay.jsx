@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+﻿import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ProductDisplay.css'
 import star_icon from '../Assets/star_icon.png'
@@ -104,8 +104,8 @@ const ProductDisplay = (props) => {
           <p>({product.reviewCount || 122})</p>
         </div>
         <div className="productdisplay-right-prices">
-          <div className="productdisplay-right-price-old">${product.old_price}</div>
-          <div className="productdisplay-right-price-new">${product.new_price}</div>
+          <div className="productdisplay-right-price-old">ETB {product.old_price}</div>
+          <div className="productdisplay-right-price-new">ETB {product.new_price}</div>
         </div>
         <div className="productdisplay-right-description">
           {product.description || 'A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment'}

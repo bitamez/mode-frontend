@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import productAPI from '../api/productAPI';
 
 const TestConnection = () => {
@@ -50,7 +50,7 @@ const TestConnection = () => {
                         <div key={product.id} style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
                             <p><strong>ID:</strong> {product.id}</p>
                             <p><strong>Name:</strong> {product.name}</p>
-                            <p><strong>Price:</strong> ${product.new_price}</p>
+                            <p><strong>Price:</strong> ETB {product.new_price}</p>
                             <p><strong>Image:</strong> {product.image}</p>
                         </div>
                     ))}

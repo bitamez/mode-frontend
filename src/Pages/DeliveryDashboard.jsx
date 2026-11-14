@@ -348,7 +348,7 @@ const DeliveryDashboard = () => {
                                 <h3>Order Information</h3>
                                 <p><strong>Order Date:</strong> {formatDate(selectedDelivery.createdAt)}</p>
                                 <p><strong>Payment Method:</strong> {selectedDelivery.paymentMethod?.replace('_', ' ').toUpperCase()}</p>
-                                <p><strong>Total Amount:</strong> ${selectedDelivery.total?.toFixed(2)}</p>
+                                <p><strong>Total Amount:</strong> ETB {selectedDelivery.total?.toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
